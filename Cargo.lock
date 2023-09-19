@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "YolandeOS"
+name = "yolande_os"
 version = "0.1.0"
