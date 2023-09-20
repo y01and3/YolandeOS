@@ -1,3 +1,6 @@
+[build]
+target = "x86_64-YolandeOS.json"
+
 [unstable]
 mtime-on-use = true
 build-std-features = ["compiler-builtins-mem"]
