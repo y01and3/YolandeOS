@@ -1,7 +1,4 @@
-[build]
-target = "x86_64-YolandeOS.json"
-
 [unstable]
-mtime-on-use = true
-build-std-features = ["compiler-builtins-mem"]
-build-std = ["core", "compiler_builtins"]
+# enable the unstable artifact-dependencies feature, see
+# https://doc.rust-lang.org/nightly/cargo/reference/unstable.html#artifact-dependencies
+bindeps = true
