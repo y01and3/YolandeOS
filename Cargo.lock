@@ -499,7 +499,6 @@ version = "0.1.0"
 dependencies = [
  "bootloader-x86_64-common",
  "bootloader_api",
- "noto-sans-mono-bitmap",
 ]
 
 [[package]]
