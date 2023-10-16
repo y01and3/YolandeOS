@@ -1,5 +1,16 @@
+use core::fmt;
+use lazy_static::lazy_static;
+use spin::Mutex;
 use volatile::Volatile;
-use core::fmt::{self, Write as _};
+
+lazy_static! {
+    pub static ref WRITER: Mutex<Writer> = Mutex::new(Writer {
+        row_position: 0,
+        column_position: 0,
+        attribute: VgaTextAttribute::new(Color::Blue, true, Color::Black, false),
+        buffer: unsafe { &mut *(0xb8000 as *mut Buffer) },
+    });
+}
 
 const BUFFER_HEIGHT: usize = 25;
 const BUFFER_WIDTH: usize = 80;
@@ -57,14 +68,6 @@ impl VgaTextAttribute {
 }
 
 impl Writer {
-    fn new(attribute: VgaTextAttribute) -> Writer {
-        Writer {
-            row_position: 0,
-            column_position: 0,
-            attribute,
-            buffer: unsafe { &mut *(0xb8000 as *mut Buffer) },
-        }
-    }
     fn new_line(&mut self) {
         if self.row_position < BUFFER_HEIGHT - 1 {
             self.row_position = self.row_position + 1;
@@ -119,15 +122,4 @@ impl fmt::Write for Writer {
         self.write_string(s);
         Ok(())
     }
-}
-
-pub fn print_something() {
-    let mut writer = Writer::new(VgaTextAttribute::new(
-        Color::Blue,
-        true,
-        Color::Black,
-        false,
-    ));
-
-    writeln!(&mut writer, "The numbers are {} and {}", 42, 1.0/3.0).unwrap();
 }
