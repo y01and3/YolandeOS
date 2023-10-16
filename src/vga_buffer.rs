@@ -1,4 +1,5 @@
 use volatile::Volatile;
+use core::fmt::{self, Write as _};
 
 const BUFFER_HEIGHT: usize = 25;
 const BUFFER_WIDTH: usize = 80;
@@ -113,6 +114,13 @@ impl Writer {
     }
 }
 
+impl fmt::Write for Writer {
+    fn write_str(&mut self, s: &str) -> fmt::Result {
+        self.write_string(s);
+        Ok(())
+    }
+}
+
 pub fn print_something() {
     let mut writer = Writer::new(VgaTextAttribute::new(
         Color::Blue,
@@ -121,8 +129,5 @@ pub fn print_something() {
         false,
     ));
 
-    writer.write_byte(b'H');
-    writer.write_string("ello ");
-    writer.write_string("Wörld!");
-    writer.write_string("\nabc\nd");
+    writeln!(&mut writer, "The numbers are {} and {}", 42, 1.0/3.0).unwrap();
 }
