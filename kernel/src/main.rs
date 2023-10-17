@@ -8,7 +8,7 @@ mod writer;
 
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
-    println!("{}",info);
+    println!("{}", info);
     loop {}
 }
 
