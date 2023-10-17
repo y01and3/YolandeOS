@@ -3,10 +3,12 @@
 
 use bootloader_api::entry_point;
 use bootloader_x86_64_common::framebuffer;
-use core::{fmt::Write, panic::PanicInfo};
+use core::panic::PanicInfo;
+mod writer;
 
 #[panic_handler]
-fn panic(_info: &PanicInfo) -> ! {
+fn panic(info: &PanicInfo) -> ! {
+    println!("{}",info);
     loop {}
 }
 
@@ -16,9 +18,10 @@ entry_point!(kernel_main);
 fn kernel_main(boot_info: &'static mut bootloader_api::BootInfo) -> ! {
     if let Some(buffer) = boot_info.framebuffer.as_mut() {
         let info = buffer.info();
-        let mut writer = framebuffer::FrameBufferWriter::new(buffer.buffer_mut(), info);
-        writer.write_str("Hello World!").unwrap();
+        let writer = framebuffer::FrameBufferWriter::new(buffer.buffer_mut(), info);
+        *writer::WRITER.lock() = Some(writer);
     }
-
+    println!("abc");
+    println!("123");
     loop {}
 }
